@@ -4,11 +4,16 @@ import { lane } from './lane.js';
 import { readStatus } from './status.js';
 import { Layout } from './views/layout.js';
 import { StatusBoard } from './views/status.js';
+import { registerDigestApi } from './digest/api.js';
+import { registerDigestPage } from './digest/page.js';
 
 export function createApp(config: RigConfig = loadConfig()) {
   const app = new Hono();
 
   app.get('/health', (c) => c.json({ ok: true, lane: lane().id }));
+
+  registerDigestApi(app, config);
+  registerDigestPage(app, config);
 
   app.get('/', (c) =>
     c.html(
